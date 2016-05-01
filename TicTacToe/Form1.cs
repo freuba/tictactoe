@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -185,6 +186,22 @@ namespace TicTacToe
             // always center
             if (B2.Enabled)
                 buttonClick(B2);
+            // danach die Ecken
+            else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
+            {
+                object[] btnArray = { A1, A3, C1, C3 };
+                ArrayList btnArrayList = new ArrayList();
+
+                foreach (object btn in btnArray)
+                {
+                    Button b = (Button)btn;
+                    if (b.Enabled)
+                        btnArrayList.Add(b);
+                }
+                Random rnd = new Random();
+                int randomMove = rnd.Next(0, btnArrayList.Count);
+                buttonClick(btnArrayList[randomMove]);
+            }
             // check if x or o could win with the next move
             // horizontal
             // 1
@@ -322,15 +339,7 @@ namespace TicTacToe
             // right down
 
 
-            else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
-            {
-                Random rnd = new Random();
-                int randomMove = rnd.Next(0, 4);
-
-                object[] btnArray = { A1, A3, C1, C3 };
-
-                buttonClick(btnArray[randomMove]);
-            }
+          
             else
             {
                 Random rnd = new Random();

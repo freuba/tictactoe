@@ -242,6 +242,7 @@ namespace TicTacToe
                 buttonClick(C1);
             
             // Wenn keine Gewinnbedingung gefunden, dann die Ecken besetzen
+            /*Todo: durch wählen zweier gegenüberliegenden ecke in z1 + z2 verliert ai*/
             else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
             {
                 object[] btnArray = { A1, A3, C1, C3 };

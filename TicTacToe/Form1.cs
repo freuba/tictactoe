@@ -12,9 +12,12 @@ namespace TicTacToe
         int turns = 0;
         bool globalTwoPlayer = false;
         
+        
         public Form1()
         {
             InitializeComponent();
+            MagicSquare.createNSquare(3);
+
         }
 
         private void Form1_Load(object sender, EventArgs e)

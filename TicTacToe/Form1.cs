@@ -11,7 +11,6 @@ namespace TicTacToe
         bool winnerFound = false;
         int turns = 0;
         bool globalTwoPlayer = false;
-        bool GameFieldArrayCreated = false;
         
         public Form1()
         {
@@ -52,10 +51,10 @@ namespace TicTacToe
             turns++;
 
          //   checkForWinner();
-            if (!EndGame() && (globalTwoPlayer) && (!turn)) computerMove();
+            if (!checkForWinner() && (globalTwoPlayer) && (!turn)) computerMove();
         }
 
-        private void checkForWinnerOld()
+        private bool checkForWinner()
         {
             //horizontal check
             if ((A1.Text == A2.Text) && (A2.Text == A3.Text) && !A1.Enabled) winnerFound = true;
@@ -70,41 +69,7 @@ namespace TicTacToe
             // diagonal check
             else if ((A1.Text == B2.Text) && (B2.Text == C3.Text) && !A1.Enabled) winnerFound = true;
             else if ((A3.Text == B2.Text) && (B2.Text == C1.Text) && !C1.Enabled) winnerFound = true;
-            
-            //return winnerFound;
-        }
 
-        private void checkForWinnerNew()
-        {
-            // Sollte zu Spielbeginn eigentlich erstellt werden
-            // wodurch ein Prüfung hier und auch die variable überflüssig wäre
-            if (!GameFieldArrayCreated) createGameField();
-
-
-            
-        }
-
-        private void createGameField()
-        {
-            object[,] GameFieldArray =
-            {
-                { A1, A2, A3 },
-                { B1, B2, B3 },
-                { C1, C2, C3 }
-            };
-
-            /*
-            Magic Square
-
-            */
-
-            GameFieldArrayCreated = true;
-        }
-
-
-        private bool EndGame()
-        {
-            checkForWinnerOld();
             if (winnerFound)
             {
                 if (turn)
@@ -206,7 +171,7 @@ namespace TicTacToe
         {
             bool twoPlayer = true;
             startNewGame(twoPlayer);
-            if ( (!turn) && (!EndGame()) ) computerMove();
+            if ((!turn) && (!checkForWinner())) computerMove();
         }
 
         private void computerMove()
@@ -214,6 +179,7 @@ namespace TicTacToe
             // always center
             if (B2.Enabled)
                 buttonClick(B2);
+            
             // check if x or o could win with the next move
             // horizontal
             // 1
@@ -274,6 +240,25 @@ namespace TicTacToe
                 buttonClick(B2);
             else if (B2.Text == A3.Text && C1.Enabled && !B2.Enabled)
                 buttonClick(C1);
+            
+            // Wenn keine Gewinnbedingung gefunden, dann die Ecken besetzen
+            /*Todo: durch wählen zweier gegenüberliegenden ecke in z1 + z2 verliert ai*/
+            else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
+            {
+                object[] btnArray = { A1, A3, C1, C3 };
+                ArrayList btnArrayList = new ArrayList();
+
+                foreach (object btn in btnArray)
+                {
+                    Button b = (Button)btn;
+                    if (b.Enabled)
+                        btnArrayList.Add(b);
+                }
+                Random rnd = new Random();
+                int randomMove = rnd.Next(0, btnArrayList.Count);
+                buttonClick(btnArrayList[randomMove]);
+            }
+
             // check if the next two moves could lead to a win
             // A
             else if (A1.Text == "O" && A2.Enabled && A3.Enabled)
@@ -347,37 +332,11 @@ namespace TicTacToe
                 else if (C1.Enabled && C2.Enabled)
                     buttonClick(C3);
             }
-            
             // Diagonal
             // right down
-            
-            else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
-            {
-                //Random rnd = new Random();
-                //int randomMove = rnd.Next(0, 4);
-
-                object[] btnArray = { A1, A3, C1, C3 };
-
-                //buttonClick(btnArray[randomMove]);
-
-                // Array auf mögliche Ecken begrenzen
-                ArrayList btnArrayList = new ArrayList();
 
 
-                foreach (object btn in btnArray)
-                {
-                    Button b = (Button)btn;
-                    if (b.Enabled)
-                    {
-                        btnArrayList.Add(b);
-                    }
-                }
-
-                Random rnd = new Random();
-                int randomMove = rnd.Next(0, btnArrayList.Count);
-                buttonClick(btnArrayList[randomMove]);
-
-            }
+          
             else
             {
                 Random rnd = new Random();

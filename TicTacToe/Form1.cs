@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace TicTacToe
@@ -17,6 +11,7 @@ namespace TicTacToe
         bool winnerFound = false;
         int turns = 0;
         bool globalTwoPlayer = false;
+        bool GameFieldArrayCreated = false;
         
         public Form1()
         {
@@ -57,10 +52,10 @@ namespace TicTacToe
             turns++;
 
          //   checkForWinner();
-            if (!checkForWinner() && (globalTwoPlayer) && (!turn)) computerMove();
+            if (!EndGame() && (globalTwoPlayer) && (!turn)) computerMove();
         }
 
-        private bool checkForWinner()
+        private void checkForWinnerOld()
         {
             //horizontal check
             if ((A1.Text == A2.Text) && (A2.Text == A3.Text) && !A1.Enabled) winnerFound = true;
@@ -75,7 +70,41 @@ namespace TicTacToe
             // diagonal check
             else if ((A1.Text == B2.Text) && (B2.Text == C3.Text) && !A1.Enabled) winnerFound = true;
             else if ((A3.Text == B2.Text) && (B2.Text == C1.Text) && !C1.Enabled) winnerFound = true;
+            
+            //return winnerFound;
+        }
 
+        private void checkForWinnerNew()
+        {
+            // Sollte zu Spielbeginn eigentlich erstellt werden
+            // wodurch ein Prüfung hier und auch die variable überflüssig wäre
+            if (!GameFieldArrayCreated) createGameField();
+
+
+            
+        }
+
+        private void createGameField()
+        {
+            object[,] GameFieldArray =
+            {
+                { A1, A2, A3 },
+                { B1, B2, B3 },
+                { C1, C2, C3 }
+            };
+
+            /*
+            Magic Square
+
+            */
+
+            GameFieldArrayCreated = true;
+        }
+
+
+        private bool EndGame()
+        {
+            checkForWinnerOld();
             if (winnerFound)
             {
                 if (turn)
@@ -177,7 +206,7 @@ namespace TicTacToe
         {
             bool twoPlayer = true;
             startNewGame(twoPlayer);
-            if ((!turn) && (!checkForWinner())) computerMove();
+            if ( (!turn) && (!EndGame()) ) computerMove();
         }
 
         private void computerMove()
@@ -318,18 +347,36 @@ namespace TicTacToe
                 else if (C1.Enabled && C2.Enabled)
                     buttonClick(C3);
             }
+            
             // Diagonal
             // right down
-
-
+            
             else if (A1.Enabled || C1.Enabled || A3.Enabled || C3.Enabled)
             {
-                Random rnd = new Random();
-                int randomMove = rnd.Next(0, 4);
+                //Random rnd = new Random();
+                //int randomMove = rnd.Next(0, 4);
 
                 object[] btnArray = { A1, A3, C1, C3 };
 
-                buttonClick(btnArray[randomMove]);
+                //buttonClick(btnArray[randomMove]);
+
+                // Array auf mögliche Ecken begrenzen
+                ArrayList btnArrayList = new ArrayList();
+
+
+                foreach (object btn in btnArray)
+                {
+                    Button b = (Button)btn;
+                    if (b.Enabled)
+                    {
+                        btnArrayList.Add(b);
+                    }
+                }
+
+                Random rnd = new Random();
+                int randomMove = rnd.Next(0, btnArrayList.Count);
+                buttonClick(btnArrayList[randomMove]);
+
             }
             else
             {

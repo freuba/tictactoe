@@ -10,33 +10,36 @@ namespace TicTacToe
     {
         public static void createMagicSquare(int n)
         {
+            // Create Matrix
+            int[,] matrix = new int[n, n];
+
             if (n%2 == 1) //n is odd
             {
-                OddSquare(n);
+                OddSquare(matrix, n);
             }
             else // n is even
             {
                 if (n % 4 == 0) //doubly even order
-                    doublyEvenMagicSquare();
+                    doublyEvenMagicSquare(matrix, n);
                 else
-                    singlyEvenMagixSquare();
+                    singlyEvenMagicSquare(matrix, n);
             }
                 
         }
 
-        private static void doublyEvenMagicSquare()
+        private static void doublyEvenMagicSquare(int[,] matrix, int n)
         {
             throw new NotImplementedException();
         }
 
-        private static void singlyEvenMagixSquare()
+        private static void singlyEvenMagicSquare(int[,] matrix, int n)
         {
             throw new NotImplementedException();
         }
 
-        public static void OddSquare(int n)
+        public static void OddSquare(int[,] matrix, int n)
         {
-            int[,] matrix = new int[n, n];
+
 
             int nsqr = n * n;
             int i = 0, j = n / 2;     // start position

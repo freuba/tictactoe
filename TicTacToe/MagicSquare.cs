@@ -8,7 +8,7 @@ namespace TicTacToe
 {
     class MagicSquare
     {
-        public static void createMagicSquare(int n)
+        public static int[,] createMagicSquare(int n)
         {
             // Create Matrix
             int[,] matrix = new int[n, n];
@@ -24,6 +24,7 @@ namespace TicTacToe
                 else
                     singlyEvenMagicSquare(matrix, n);
             }
+            return matrix;
                 
         }
 

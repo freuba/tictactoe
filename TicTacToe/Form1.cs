@@ -6,21 +6,27 @@ namespace TicTacToe
 {
     public partial class Form1 : Form
     {
+        // Global variables
         bool turn = true; // true = X;false = O;
-        String mark = "";
         bool winnerFound = false;
-        int turns = 0;
         bool globalTwoPlayer = false;
+
+        int xy, x, y;
+
+        int turns = 0;
+
+        String mark = "";
+
+        int[,] c4warray = new int[3, 3];
+        int[,] mSquare3 = MagicSquare.createMagicSquare(3);
+        object[,] gameField = new object[3, 3];
         
-        
+
         public Form1()
         {
             InitializeComponent();
-            // Class soll die richtige Methode gerade/ungerade wählen
-            MagicSquare.createMagicSquare(4);
-
         }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -54,8 +60,49 @@ namespace TicTacToe
 
             turns++;
 
+            x = 0;
+            y = 0;
+            xy = 0;
+            
+
+            foreach (object btn in singleField)
+            {
+                Button a = (Button)btn;
+                while(a.Name != b.Name)
+                {
+                    xy++;
+                }
+                break;
+            }
+            x = xy % 3;
+            y = xy / 3;
+
+            if (checkForWinnerNew() != checkForWinner())
+                Console.WriteLine("error");
+
+               
+            
+
          //   checkForWinner();
             if (!checkForWinner() && (globalTwoPlayer) && (!turn)) computerMove();
+        }
+
+        private bool checkForWinnerNew()
+        {
+            //throw new NotImplementedException();
+            c4warray[x, y] = mSquare3[x, y];
+            int sum;
+            bool result = false;
+            for (int i = 0; i < 3; ++i)
+            {
+                sum = 0;
+                for (int j = 0; j  < 3; ++j)
+                {
+                    sum += c4warray[i, j];
+                    if (sum == 15) result = true;
+                }
+            }
+            return result;
         }
 
         private bool checkForWinner()
@@ -110,7 +157,7 @@ namespace TicTacToe
             MainMenuStrip.Enabled = true;
         }
 
-        private void startNewGame(bool twoPlayer)
+        public void startNewGame(bool twoPlayer)
         {
             
             foreach (Control c in Controls)
@@ -127,8 +174,25 @@ namespace TicTacToe
             winnerFound = false;
             turns = 0;
             turn = true;
-                   
+            
             globalTwoPlayer = twoPlayer ? true : false;
+
+            gameField = createGameField();
+
+
+            object[] singleField = { A1, A2, A3, B1, B2, B3, C1, C2, C3 };
+        }
+
+        private object[,] createGameField()
+        {
+        
+            object[,] Matrix =
+            {
+                {A1, A2, A3},
+                {B1, B2, B3},
+                {C1, C2, C3}
+            };
+            return Matrix;
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -346,8 +410,8 @@ namespace TicTacToe
                 Random rnd = new Random();
                 int randomMove = rnd.Next(0, 9);
 
+                // 1 dimensional game field
                 object[] btnArray = { A1, A2, A3, B1, B2, B3, C1, C2, C3 };
-
                 buttonClick(btnArray[randomMove]);
             }
 

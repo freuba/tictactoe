@@ -16,7 +16,8 @@ namespace TicTacToe
         public Form1()
         {
             InitializeComponent();
-            MagicSquare.createNSquare(3);
+            // Class soll die richtige Methode gerade/ungerade wählen
+            MagicSquare.createMagicSquare(4);
 
         }
 

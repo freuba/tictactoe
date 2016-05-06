@@ -20,7 +20,9 @@ namespace TicTacToe
         int[,] c4warray = new int[3, 3];
         int[,] mSquare3 = MagicSquare.createMagicSquare(3);
         object[,] gameField = new object[3, 3];
-        
+        object[] singleField;
+
+
 
         public Form1()
         {
@@ -60,12 +62,31 @@ namespace TicTacToe
 
             turns++;
 
+            
+            // keine trennung zwischen x + o
+            if (checkForWinnerNew(sender) != checkForWinner())
+                Console.WriteLine("error");
+
+               
+            
+
+         //   checkForWinner();
+            //if (!checkForWinner() && (globalTwoPlayer) && (!turn)) computerMove();
+        }
+
+        private bool checkForWinnerNew(object sender)
+        {
+            //throw new NotImplementedException();
+            Button b = (Button)sender;
             x = 0;
             y = 0;
             xy = 0;
-            
+            String[] stringButtons = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
+            //singleField = varsingleField;
 
-            foreach (object btn in singleField)
+            /*
+            * using index of instead
+            foreach (object btn in varsingleField)
             {
                 Button a = (Button)btn;
                 while(a.Name != b.Name)
@@ -74,25 +95,19 @@ namespace TicTacToe
                 }
                 break;
             }
+            */
+            
+            xy = Array.IndexOf(stringButtons, b.Name);
             x = xy % 3;
             y = xy / 3;
 
-            if (checkForWinnerNew() != checkForWinner())
-                Console.WriteLine("error");
 
-               
-            
 
-         //   checkForWinner();
-            if (!checkForWinner() && (globalTwoPlayer) && (!turn)) computerMove();
-        }
-
-        private bool checkForWinnerNew()
-        {
-            //throw new NotImplementedException();
             c4warray[x, y] = mSquare3[x, y];
             int sum;
             bool result = false;
+
+            //horizontal
             for (int i = 0; i < 3; ++i)
             {
                 sum = 0;
@@ -102,6 +117,31 @@ namespace TicTacToe
                     if (sum == 15) result = true;
                 }
             }
+            // vertical
+            for (int i = 0; i < 3; ++i)
+            {
+                sum = 0;
+                for (int j = 0; j < 3; ++j)
+                {
+                    sum += c4warray[j, i];
+                    if (sum == 15) result = true;
+                }
+            }
+
+            // diagonal
+            for (int i = 0; i < 3; ++i)
+            {
+                sum = 0;
+                sum += c4warray[i, i];
+                if (sum == 15) result = true;     
+            }
+            for (int i = 0; i < 3; ++i)
+            {
+                sum = 0;
+                sum += c4warray[i, 2-i];
+                if (sum == 15) result = true;
+            }
+
             return result;
         }
 
@@ -180,7 +220,8 @@ namespace TicTacToe
             gameField = createGameField();
 
 
-            object[] singleField = { A1, A2, A3, B1, B2, B3, C1, C2, C3 };
+            object[] varsingleField = { A1, A2, A3, B1, B2, B3, C1, C2, C3 };
+            singleField = varsingleField;
         }
 
         private object[,] createGameField()
